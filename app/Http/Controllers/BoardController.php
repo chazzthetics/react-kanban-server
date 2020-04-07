@@ -21,10 +21,10 @@ class BoardController extends Controller
 
     public function store(Request $request)
     {
-        //TODO: validation
+        //TODO: validation -- uuid validiation later
 
         $this->validate($request, [
-            'uuid' => 'required|uuid',
+            'uuid' => 'required',
             'title' => 'required|string|max:30',
             'color' => 'required|string|max:15',
         ]);
@@ -36,11 +36,6 @@ class BoardController extends Controller
             'slug' => Str::slug($request->title),
             'color' => $request->color,
         ]);
-
-        //TODO: move out of controller, put in observer?
-        $currentBoard = Auth::user()->boards()->where('is_current', true)->firstOrFail();
-
-        $currentBoard->update(['is_current' => false]);
 
         return response()->json($board, 201);
     }
