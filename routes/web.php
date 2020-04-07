@@ -24,3 +24,13 @@ $router->group(['prefix' => 'api/auth'], function () use ($router) {
     $router->post('/logout', ['uses' => 'AuthController@logout']);
     $router->post('/user', ['uses' => 'AuthController@user']);
 });
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    // Boards
+    $router->get('/boards', ['uses' => 'BoardController@index']);
+    $router->post('/boards', ['uses' => 'BoardController@store']);
+
+    // Columns
+    $router->get('/boards/{uuid}/columns', ['uses' => 'ColumnController@index']);
+    $router->post('/boards/{uuid}/columns', ['uses' => 'ColumnController@store']);
+});
