@@ -29,8 +29,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // Boards
     $router->get('/boards', ['uses' => 'BoardController@index']);
     $router->post('/boards', ['uses' => 'BoardController@store']);
+    $router->delete('/boards/{uuid}', ['uses' => 'BoardController@destroy']);
 
     // Columns
-    $router->get('/boards/{uuid}/columns', ['uses' => 'ColumnController@index']);
+    // $router->get('/boards/{uuid}/columns', ['uses' => 'ColumnController@index']);
+    $router->get('/columns', ['uses' => 'ColumnController@index']);
     $router->post('/boards/{uuid}/columns', ['uses' => 'ColumnController@store']);
 });

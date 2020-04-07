@@ -16,7 +16,7 @@ class Board extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at',
+        'created_at', 'updated_at', 'id', 'user_id',
     ];
 
     protected $casts = [

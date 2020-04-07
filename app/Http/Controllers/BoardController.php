@@ -16,7 +16,9 @@ class BoardController extends Controller
 
     public function index()
     {
-        return Auth::user()->boards()->with('columns')->get();
+        $boards = Auth::user()->boards()->with('columns')->get();
+
+        return response()->json($boards);
     }
 
     public function store(Request $request)

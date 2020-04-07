@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Board;
+use App\Column;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ColumnController extends Controller
 {
@@ -12,17 +14,18 @@ class ColumnController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(string $uuid)
+    public function index()
     {
-        //TODO:
-        // return response()->json($columns);
+        $columns = Column::where('user_id', Auth::id())->get();
+
+        return response()->json($columns);
     }
 
     public function store(Request $request, string $uuid)
     {
-        //TODO: validate
+        //TODO: validate (uuid)
         $this->validate($request, [
-            'uuid' => 'required|unique:columns,uuid',
+            'uuid' => 'required|unique:columns',
             'title' => 'required|string|max:30',
         ]);
 
@@ -30,6 +33,7 @@ class ColumnController extends Controller
 
         $column = $board->addColumn([
             'uuid' => $request->uuid,
+            'user_id' => Auth::id(),
             'title' => $request->title,
             'board_id' => $board->id,
             'position' => $board->columns_count,
