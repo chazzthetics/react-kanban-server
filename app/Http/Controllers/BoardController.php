@@ -45,6 +45,11 @@ class BoardController extends Controller
             $board->update(['is_current' => true]);
         }
 
+        //TODO: validation
+        if ($request->title) {
+            $board->update(['title' => $request->title]);
+        }
+
         return response()->json(['message' => 'Board updated']);
     }
 
