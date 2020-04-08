@@ -29,6 +29,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // Boards
     $router->get('/boards', ['uses' => 'BoardController@index']);
     $router->post('/boards', ['uses' => 'BoardController@store']);
+    $router->patch('/boards/{uuid}', ['uses' => 'BoardController@update']);
     $router->delete('/boards/{uuid}', ['uses' => 'BoardController@destroy']);
 
     // Columns

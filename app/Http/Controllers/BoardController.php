@@ -39,7 +39,13 @@ class BoardController extends Controller
 
     public function update(Request $request, string $uuid)
     {
-        //TODO:
+        $board = Board::where('uuid', $uuid)->firstOrFail();
+
+        if ($request->boolean('current')) {
+            $board->update(['is_current' => true]);
+        }
+
+        return response()->json(['message' => 'Board updated']);
     }
 
     public function destroy(string $uuid)
