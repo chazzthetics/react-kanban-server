@@ -26,4 +26,14 @@ class Column extends Model
     {
         return $this->belongsTo(Board::class);
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function addTask(array $attributes)
+    {
+        return $this->tasks()->create($attributes);
+    }
 }

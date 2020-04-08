@@ -9,14 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ColumnController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
-        $columns = Column::where('user_id', Auth::id())->get();
+        $columns = Column::where('user_id', Auth::id())->with('tasks')->get();
 
         return response()->json($columns);
     }
@@ -40,5 +35,13 @@ class ColumnController extends Controller
         ]);
 
         return response()->json($column, 201);
+    }
+
+    public function destroy(string $uuid)
+    {
+        $column = Column::where('uuid', $uuid)->firstOrFail();
+        $column->delete();
+
+        return response()->json(['message' => 'Column removed']);
     }
 }

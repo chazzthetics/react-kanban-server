@@ -9,14 +9,9 @@ use Illuminate\Support\Str;
 
 class BoardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
-        $boards = Auth::user()->boards()->with('columns')->get();
+        $boards = Auth::user()->boards()->with(['columns', 'columns.tasks'])->get();
 
         return response()->json($boards);
     }

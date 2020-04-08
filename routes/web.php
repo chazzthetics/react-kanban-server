@@ -25,7 +25,7 @@ $router->group(['prefix' => 'api/auth'], function () use ($router) {
     $router->post('/user', ['uses' => 'AuthController@user']);
 });
 
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
     // Boards
     $router->get('/boards', ['uses' => 'BoardController@index']);
     $router->post('/boards', ['uses' => 'BoardController@store']);
@@ -35,4 +35,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // $router->get('/boards/{uuid}/columns', ['uses' => 'ColumnController@index']);
     $router->get('/columns', ['uses' => 'ColumnController@index']);
     $router->post('/boards/{uuid}/columns', ['uses' => 'ColumnController@store']);
+    $router->delete('/columns/{uuid}', ['uses' => 'ColumnController@destroy']);
+
+    // Tasks
+    $router->post('/columns/{uuid}/tasks', ['uses' => 'TaskController@store']);
+    $router->delete('/tasks/{uuid}', ['uses' => 'TaskController@destroy']);
 });
