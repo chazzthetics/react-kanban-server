@@ -45,9 +45,19 @@ class BoardController extends Controller
             $board->update(['is_current' => true]);
         }
 
-        //TODO: validation
+        if ($request->has('is_starred')) {
+            $board->update(['is_starred' => !$request->is_starred]);
+        }
+
+        $this->validate($request, [
+            'title' => 'sometimes|required|max:30',
+        ]);
+
         if ($request->title) {
-            $board->update(['title' => $request->title]);
+            $board->update([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+            ]);
         }
 
         return response()->json(['message' => 'Board updated']);
