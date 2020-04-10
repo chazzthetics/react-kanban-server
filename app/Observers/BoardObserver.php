@@ -26,7 +26,9 @@ class BoardObserver
 
     public function deleted()
     {
-        $lastBoard = Auth::user()->boards()->latest()->first();
-        $lastBoard->update(['is_current' => true]);
+        if (Auth::user()->boards()->count() > 0) {
+            $lastBoard = Auth::user()->boards()->latest()->first();
+            $lastBoard->update(['is_current' => true]);
+        }
     }
 }

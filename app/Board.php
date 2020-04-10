@@ -33,7 +33,7 @@ class Board extends Model
 
     public function columns()
     {
-        return $this->hasMany(Column::class);
+        return $this->hasMany(Column::class)->orderBy('position');
     }
 
     public function addColumn(array $attributes)
