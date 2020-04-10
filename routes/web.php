@@ -36,6 +36,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // $router->get('/boards/{uuid}/columns', ['uses' => 'ColumnController@index']);
     $router->get('/columns', ['uses' => 'ColumnController@index']);
     $router->post('/boards/{uuid}/columns', ['uses' => 'ColumnController@store']);
+    $router->patch('/columns/{uuid}', ['uses' => 'ColumnController@update']);
     $router->delete('/columns/{uuid}', ['uses' => 'ColumnController@destroy']);
 
     // Tasks

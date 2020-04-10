@@ -37,6 +37,21 @@ class ColumnController extends Controller
         return response()->json($column, 201);
     }
 
+    public function update(Request $request, string $uuid)
+    {
+        $column = Column::where('uuid', $uuid)->firstOrFail();
+
+        $this->validate($request, [
+            'title' => 'sometimes|required:max30',
+        ]);
+
+        if ($request->title) {
+            $column->update(['title' => $request->title]);
+        }
+
+        return response()->json(['message' => 'Column updated']);
+    }
+
     public function destroy(string $uuid)
     {
         $column = Column::where('uuid', $uuid)->firstOrFail();
