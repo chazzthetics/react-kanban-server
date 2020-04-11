@@ -49,6 +49,12 @@ class ColumnController extends Controller
             $column->update(['title' => $request->title]);
         }
 
+        if ($request->has('clear')) {
+            $column->tasks()->delete();
+
+            return response()->json(['message' => 'Column cleared']);
+        }
+
         return response()->json(['message' => 'Column updated']);
     }
 

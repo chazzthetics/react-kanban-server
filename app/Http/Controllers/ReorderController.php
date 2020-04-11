@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Board;
+use App\Column;
+use App\Task;
 use Illuminate\Http\Request;
 
 class ReorderController extends Controller
@@ -15,13 +17,52 @@ class ReorderController extends Controller
         foreach ($columns as $column) {
             foreach ($request->newOrder as $index => $position) {
                 if ($column->uuid === $position) {
-                    $column->position = $index;
-                    $column->save();
+                    $column->update(['position' => $index]);
                 }
-                // $column->update(['position' => $position]);
             }
         }
 
         return response()->json(['message' => 'Column reordered']);
+    }
+
+    public function tasks(Request $request, string $uuid)
+    {
+        $column = Column::where('uuid', $uuid)->firstOrFail();
+        $tasks = $column->tasks;
+
+        foreach ($tasks as $task) {
+            foreach ($request->newOrder as $index => $position) {
+                if ($task->uuid === $position) {
+                    $task->update(['position' => $index]);
+                }
+            }
+        }
+
+        return response()->json(['message' => 'Task reordered']);
+    }
+
+    public function between(Request $request, string $start_uuid, string $end_uuid)
+    {
+        $startColumn = Column::where('uuid', $start_uuid)->firstOrFail();
+        $endColumn = Column::where('uuid', $end_uuid)->firstOrFail();
+
+        if (empty($request->startOrder)) {
+            foreach ($request->endOrder as $index => $position) {
+                $task = Task::where('uuid', $position)->firstOrFail();
+                $task->update(['column_id' => $endColumn->id, 'position' => $index]);
+            }
+        }
+
+        foreach ($request->startOrder as $index => $position) {
+            $task = Task::where('uuid', $position)->firstOrFail();
+            $task->update(['column_id' => $startColumn->id, 'position' => $index]);
+        }
+
+        foreach ($request->endOrder as $index => $position) {
+            $task = Task::where('uuid', $position)->firstOrFail();
+            $task->update(['column_id' => $endColumn->id, 'position' => $index]);
+        }
+
+        return response()->json(['message' => 'Task reordered between']);
     }
 }

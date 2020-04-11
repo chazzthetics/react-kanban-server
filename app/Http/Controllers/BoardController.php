@@ -60,6 +60,12 @@ class BoardController extends Controller
             ]);
         }
 
+        if ($request->has('clear')) {
+            $board->columns()->delete();
+
+            return response()->json(['message' => 'Board cleared']);
+        }
+
         return response()->json(['message' => 'Board updated']);
     }
 
