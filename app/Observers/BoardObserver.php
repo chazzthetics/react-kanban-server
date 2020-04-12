@@ -27,14 +27,18 @@ class BoardObserver
         foreach ($boards as $board) {
             $board->update(['is_current' => false]);
         }
-
-        $board->old = $board->getOriginal();
     }
 
     public function updated(Board $board)
     {
         if ($board->isDirty('title')) {
             $board->recordActivity('title_updated');
+        }
+
+        if ($board->is_starred) {
+            $board->recordActivity('starred');
+        } elseif (!$board->is_starred) {
+            $board->recordActivity('unstarred');
         }
     }
 
@@ -45,6 +49,6 @@ class BoardObserver
             $lastBoard->update(['is_current' => true]);
         }
 
-        $board->recordActivity('removed');
+        $board->recordActivity('deleted');
     }
 }

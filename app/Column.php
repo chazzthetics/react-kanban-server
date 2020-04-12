@@ -2,13 +2,13 @@
 
 namespace App;
 
+use App\Traits\Recordable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class Column extends Model
 {
+    use Recordable;
+
     protected $fillable = [
         'uuid', 'title', 'position', 'board_id', 'user_id',
     ];
@@ -25,8 +25,6 @@ class Column extends Model
         'is_locked' => 'boolean',
     ];
 
-    public $old = [];
-
     public function board()
     {
         return $this->belongsTo(Board::class);
@@ -40,36 +38,5 @@ class Column extends Model
     public function addTask(array $attributes)
     {
         return $this->tasks()->create($attributes);
-    }
-
-    public function activities()
-    {
-        return $this->morphMany(Activity::class, 'recordable')->latest();
-    }
-
-    public function recordActivity(string $description)
-    {
-        $this->activities()->create([
-            'user_id' => Auth::id(),
-            'description' => $description,
-            'changes' => $this->activityChanges($description),
-        ]);
-    }
-
-    protected function activityChanges($description)
-    {
-        if (Str::endsWith($description, 'updated')) {
-            return [
-                'before' => Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
-                'after' => Arr::except($this->getChanges(), 'updated_at'),
-            ];
-        }
-
-        if (Str::endsWith($description, 'removed')) {
-            return [
-                'before' => ['title' => $this->title],
-                'after' => [],
-            ];
-        }
     }
 }

@@ -11,11 +11,6 @@ class ColumnObserver
         $column->recordActivity('created');
     }
 
-    public function updating(Column $column)
-    {
-        $column->old = $column->getOriginal();
-    }
-
     public function updated(Column $column)
     {
         if ($column->isDirty('title')) {
@@ -25,6 +20,6 @@ class ColumnObserver
 
     public function deleted(Column $column)
     {
-        $column->recordActivity('removed');
+        $column->recordActivity('deleted');
     }
 }
