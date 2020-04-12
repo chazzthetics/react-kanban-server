@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Activity extends Model
 {
     protected $fillable = [
-        'user_id', 'board_id', 'description', 'changes',
+        'user_id', 'description', 'changes',
     ];
 
     protected $casts = [

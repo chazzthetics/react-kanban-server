@@ -18,7 +18,7 @@ class BoardObserver
 
     public function created(Board $board)
     {
-        $board->recordActivity('board_created');
+        $board->recordActivity('created');
     }
 
     public function updating(Board $board)
@@ -34,15 +34,17 @@ class BoardObserver
     public function updated(Board $board)
     {
         if ($board->isDirty('title')) {
-            $board->recordActivity('board_title_updated');
+            $board->recordActivity('title_updated');
         }
     }
 
-    public function deleted()
+    public function deleted(Board $board)
     {
         if (Auth::user()->boards()->count() > 0) {
             $lastBoard = Auth::user()->boards()->latest()->first();
             $lastBoard->update(['is_current' => true]);
         }
+
+        $board->recordActivity('removed');
     }
 }

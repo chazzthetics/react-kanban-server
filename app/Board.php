@@ -54,7 +54,6 @@ class Board extends Model
     {
         $this->activities()->create([
             'user_id' => $this->user_id,
-            'board_id' => $this->id,
             'description' => $description,
             'changes' => $this->activityChanges($description),
         ]);
@@ -66,6 +65,13 @@ class Board extends Model
             return [
                 'before' => Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
                 'after' => Arr::except($this->getChanges(), 'updated_at'),
+            ];
+        }
+
+        if (Str::endsWith($description, 'removed')) {
+            return [
+                'before' => ['title' => $this->title],
+                'after' => [],
             ];
         }
     }

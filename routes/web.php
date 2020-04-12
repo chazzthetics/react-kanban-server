@@ -50,4 +50,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     // Activities
     $router->get('/activities', ['uses' => 'ActivityController@index']);
+    $router->delete('/activities/{id}', ['uses' => 'ActivityController@destroy']);
+    $router->put('/activities', ['uses' => 'ActivityController@clear']);
 });

@@ -3,6 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Column extends Model
 {
@@ -47,13 +50,26 @@ class Column extends Model
     public function recordActivity(string $description)
     {
         $this->activities()->create([
-            'user_id' => $this->user()->id,
-            'board_id' => $this->board_id,
+            'user_id' => Auth::id(),
             'description' => $description,
-            'changes' => [
-                'before' => array_diff($this->old, $this->getAttributes()),
-                'after' => $this->getChanges(),
-            ],
+            'changes' => $this->activityChanges($description),
         ]);
+    }
+
+    protected function activityChanges($description)
+    {
+        if (Str::endsWith($description, 'updated')) {
+            return [
+                'before' => Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
+                'after' => Arr::except($this->getChanges(), 'updated_at'),
+            ];
+        }
+
+        if (Str::endsWith($description, 'removed')) {
+            return [
+                'before' => ['title' => $this->title],
+                'after' => [],
+            ];
+        }
     }
 }

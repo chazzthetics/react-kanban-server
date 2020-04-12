@@ -8,7 +8,7 @@ class ColumnObserver
 {
     public function created(Column $column)
     {
-        $column->recordActivity('column_created');
+        $column->recordActivity('created');
     }
 
     public function updating(Column $column)
@@ -19,7 +19,12 @@ class ColumnObserver
     public function updated(Column $column)
     {
         if ($column->isDirty('title')) {
-            $column->recordActivity('column_title_updated');
+            $column->recordActivity('title_updated');
         }
+    }
+
+    public function deleted(Column $column)
+    {
+        $column->recordActivity('removed');
     }
 }
