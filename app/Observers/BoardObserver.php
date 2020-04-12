@@ -16,11 +16,25 @@ class BoardObserver
         }
     }
 
+    public function created(Board $board)
+    {
+        $board->recordActivity('board_created');
+    }
+
     public function updating(Board $board)
     {
         $boards = Auth::user()->boards()->get()->except($board->id);
         foreach ($boards as $board) {
             $board->update(['is_current' => false]);
+        }
+
+        $board->old = $board->getOriginal();
+    }
+
+    public function updated(Board $board)
+    {
+        if ($board->isDirty('title')) {
+            $board->recordActivity('board_title_updated');
         }
     }
 

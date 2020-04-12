@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Board;
+use App\Column;
 use App\Observers\BoardObserver;
+use App\Observers\ColumnObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Board::observe(BoardObserver::class);
+        Column::observe(ColumnObserver::class);
     }
 }

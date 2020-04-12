@@ -22,6 +22,8 @@ class Column extends Model
         'is_locked' => 'boolean',
     ];
 
+    public $old = [];
+
     public function board()
     {
         return $this->belongsTo(Board::class);
@@ -35,5 +37,23 @@ class Column extends Model
     public function addTask(array $attributes)
     {
         return $this->tasks()->create($attributes);
+    }
+
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'recordable')->latest();
+    }
+
+    public function recordActivity(string $description)
+    {
+        $this->activities()->create([
+            'user_id' => $this->user()->id,
+            'board_id' => $this->board_id,
+            'description' => $description,
+            'changes' => [
+                'before' => array_diff($this->old, $this->getAttributes()),
+                'after' => $this->getChanges(),
+            ],
+        ]);
     }
 }

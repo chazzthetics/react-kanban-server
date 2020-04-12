@@ -41,6 +41,7 @@ class ReorderController extends Controller
         return response()->json(['message' => 'Task reordered']);
     }
 
+    // TODO: refactor
     public function between(Request $request, string $start_uuid, string $end_uuid)
     {
         $startColumn = Column::where('uuid', $start_uuid)->firstOrFail();
@@ -51,16 +52,16 @@ class ReorderController extends Controller
                 $task = Task::where('uuid', $position)->firstOrFail();
                 $task->update(['column_id' => $endColumn->id, 'position' => $index]);
             }
-        }
+        } else {
+            foreach ($request->startOrder as $index => $position) {
+                $task = Task::where('uuid', $position)->firstOrFail();
+                $task->update(['column_id' => $startColumn->id, 'position' => $index]);
+            }
 
-        foreach ($request->startOrder as $index => $position) {
-            $task = Task::where('uuid', $position)->firstOrFail();
-            $task->update(['column_id' => $startColumn->id, 'position' => $index]);
-        }
-
-        foreach ($request->endOrder as $index => $position) {
-            $task = Task::where('uuid', $position)->firstOrFail();
-            $task->update(['column_id' => $endColumn->id, 'position' => $index]);
+            foreach ($request->endOrder as $index => $position) {
+                $task = Task::where('uuid', $position)->firstOrFail();
+                $task->update(['column_id' => $endColumn->id, 'position' => $index]);
+            }
         }
 
         return response()->json(['message' => 'Task reordered between']);
