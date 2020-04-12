@@ -20,6 +20,6 @@ class ColumnObserver
 
     public function deleted(Column $column)
     {
-        $column->recordActivity('deleted');
+        $column->recordActivity('removed');
     }
 }

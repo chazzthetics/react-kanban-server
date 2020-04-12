@@ -42,7 +42,7 @@ trait Recordable
         ]);
     }
 
-    protected function activityChanges($description)
+    protected function activityChanges(string $description)
     {
         //TODO: edit...
         if (Str::endsWith($description, 'updated')) {
@@ -54,15 +54,15 @@ trait Recordable
 
         if (Str::endsWith($description, 'removed')) {
             return [
-                'before' => ['title' => $this->title],
+                'before' => ['title' => $this->title ? $this->title : $this->column->title],
                 'after' => [],
             ];
         }
 
         if (Str::endsWith($description, 'starred')) {
             return [
-                'before' => ['title' => $this->title],
-                'after' => [],
+                'before' => [],
+                'after' => ['title' => $this->title],
             ];
         }
     }

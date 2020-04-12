@@ -35,9 +35,9 @@ class BoardObserver
             $board->recordActivity('title_updated');
         }
 
-        if ($board->is_starred) {
+        if ($board->isDirty('is_starred') && $board->is_starred) {
             $board->recordActivity('starred');
-        } elseif (!$board->is_starred) {
+        } elseif ($board->isDirty('is_starred') && !$board->is_starred) {
             $board->recordActivity('unstarred');
         }
     }
@@ -49,6 +49,6 @@ class BoardObserver
             $lastBoard->update(['is_current' => true]);
         }
 
-        $board->recordActivity('deleted');
+        $board->recordActivity('removed');
     }
 }

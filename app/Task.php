@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\Recordable;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+    use Recordable;
+
     protected $fillable = [
         'uuid', 'content', 'position', 'column_id', 'user_id',
     ];
