@@ -29,4 +29,9 @@ class Task extends Model
     {
         return $this->belongsTo(Column::class);
     }
+
+    public function previousColumnTitle()
+    {
+        return Column::find($this->previousAttributes['column_id'])->title;
+    }
 }

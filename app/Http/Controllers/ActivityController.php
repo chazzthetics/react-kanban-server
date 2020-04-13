@@ -10,9 +10,16 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        $activities = Activity::where('user_id', Auth::id())->latest()->get();
+        $activities = Activity::where('user_id', Auth::id())->latest()->paginate(20);
 
         return response()->json($activities);
+    }
+
+    public function show()
+    {
+        $activitiy = Activity::where('user_id', Auth::id())->latest()->firstOrFail();
+
+        return response()->json($activitiy);
     }
 
     public function destroy(int $id)

@@ -16,6 +16,10 @@ class TaskObserver
         if ($task->isDirty('content')) {
             $task->recordActivity('content_updated');
         }
+
+        if ($task->isDirty('column_id')) {
+            $task->recordActivity('moved');
+        }
     }
 
     public function deleted(Task $task)

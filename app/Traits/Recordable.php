@@ -44,7 +44,14 @@ trait Recordable
 
     protected function activityChanges(string $description)
     {
-        //TODO: edit...
+        //TODO: edit...looks disgusting
+        if (Str::contains($description, 'created') && 'Task' === class_basename($this)) {
+            return [
+                'before' => null,
+                'after' => ['title' => $this->column->title ?: '', 'content' => $this->content ?: ''],
+            ];
+        }
+
         if (Str::endsWith($description, 'updated')) {
             return [
                 'before' => Arr::except(array_diff($this->previousAttributes, $this->getAttributes()), 'updated_at'),
@@ -54,7 +61,7 @@ trait Recordable
 
         if (Str::endsWith($description, 'removed')) {
             return [
-                'before' => ['title' => $this->title ? $this->title : $this->column->title],
+                'before' => ['title' => $this->title ?: $this->column->title, 'content' => 'Task' === class_basename($this) ? $this->content : ''],
                 'after' => [],
             ];
         }
@@ -63,6 +70,13 @@ trait Recordable
             return [
                 'before' => [],
                 'after' => ['title' => $this->title],
+            ];
+        }
+
+        if (Str::endsWith($description, 'moved')) {
+            return [
+                'before' => ['title' => $this->previousColumnTitle()],
+                'after' => ['title' => $this->column->title, 'content' => $this->content],
             ];
         }
     }
