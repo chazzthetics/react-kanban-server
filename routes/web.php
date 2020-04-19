@@ -41,6 +41,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     // Tasks
     $router->post('/columns/{uuid}/tasks', ['uses' => 'TaskController@store']);
+    $router->patch('/tasks/{uuid}', ['uses' => 'TaskController@update']);
     $router->delete('/tasks/{uuid}', ['uses' => 'TaskController@destroy']);
 
     // Reorder

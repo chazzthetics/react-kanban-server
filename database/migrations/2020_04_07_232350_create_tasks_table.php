@@ -16,7 +16,10 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->text('content');
+            $table->text('title');
+            $table->text('description')->nullable();
+            $table->text('comment')->nullable();
+            $table->string('attatchment')->nullable(); //TODO: Change later
             $table->boolean('completed')->default(false);
             $table->unsignedInteger('position');
             $table->date('due_date')->nullable();

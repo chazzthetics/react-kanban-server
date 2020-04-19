@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Activity;
+use App\Column;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -37,31 +38,54 @@ trait Recordable
     {
         $this->activities()->create([
             'user_id' => Auth::id(),
+            'board_id' => $this->getBoardId(),
             'description' => $description,
             'changes' => $this->activityChanges($description),
         ]);
     }
 
+    private function getBoardId()
+    {
+        if ('Task' === class_basename($this)) {
+            return $this->column->board_id; //FIXME: look up hasone relation again
+        } elseif ('Column' === class_basename($this)) {
+            return $this->board_id;
+        }
+
+        return $this->id;
+    }
+
     protected function activityChanges(string $description)
     {
         //TODO: edit...looks disgusting
-        if (Str::contains($description, 'created') && 'Task' === class_basename($this)) {
-            return [
-                'before' => null,
-                'after' => ['title' => $this->column->title ?: '', 'content' => $this->content ?: ''],
-            ];
+        if (Str::endsWith($description, 'created')) {
+            if ('Task' === class_basename($this)) {
+                return [
+                    'before' => null,
+                    'after' => ['column_title' => $this->column->title ?: '', 'task_title' => $this->title ?: ''],
+                ];
+            } else {
+                return [
+                    'before' => null,
+                    'after' => ['title' => $this->title ?: ''],
+                ];
+            }
         }
 
         if (Str::endsWith($description, 'updated')) {
             return [
-                'before' => Arr::except(array_diff($this->previousAttributes, $this->getAttributes()), 'updated_at'),
+                'before' => ['title' => $this->previousColumnTitle()],
                 'after' => Arr::except($this->getChanges(), 'updated_at'),
             ];
+            // return [
+            //     'before' => Arr::except(array_diff($this->previousAttributes, $this->getAttributes()), 'updated_at'),
+            //     'after' => Arr::except($this->getChanges(), 'updated_at'),
+            // ];
         }
 
         if (Str::endsWith($description, 'removed')) {
             return [
-                'before' => ['title' => $this->title ?: $this->column->title, 'content' => 'Task' === class_basename($this) ? $this->content : ''],
+                'before' => ['title' => $this->title ?: $this->column->title, 'task_title' => 'Task' === class_basename($this) ? $this->title : ''],
                 'after' => [],
             ];
         }
@@ -73,11 +97,28 @@ trait Recordable
             ];
         }
 
-        if (Str::endsWith($description, 'moved')) {
+        if (Str::endsWith($description, 'locked')) {
             return [
-                'before' => ['title' => $this->previousColumnTitle()],
-                'after' => ['title' => $this->column->title, 'content' => $this->content],
+                'before' => [],
+                'after' => ['title' => $this->title],
             ];
         }
+
+        if (Str::endsWith($description, 'moved')) {
+            return [
+                'before' => ['column_title' => $this->previousColumnTitle()],
+                'after' => ['column_title' => $this->column->title, 'task_title' => $this->title],
+            ];
+        }
+    }
+
+    private function previousColumnTitle()
+    {
+        //FIXME:
+        if ('Task' === class_basename($this)) {
+            return Column::find($this->previousAttributes['column_id'])->title;
+        }
+
+        return $this->previousAttributes['title'];
     }
 }

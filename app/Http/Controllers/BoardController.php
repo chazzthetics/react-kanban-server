@@ -23,15 +23,16 @@ class BoardController extends Controller
         $this->validate($request, [
             'uuid' => 'required',
             'title' => 'required|string|max:30',
-            'color' => 'required|string|max:15',
+            'background' => 'required|string|max:30',
+            'description' => '',
         ]);
 
         $board = Board::create([
-            'uuid' => $request->uuid,
             'user_id' => Auth::id(),
+            'uuid' => $request->uuid,
             'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'color' => $request->color,
+            'background' => $request->background,
+            'description' => $request->description,
         ]);
 
         return response()->json($board, 201);
@@ -49,8 +50,15 @@ class BoardController extends Controller
             $board->update(['is_starred' => !$request->is_starred]);
         }
 
+        if ($request->has('clear')) {
+            $board->columns()->delete();
+
+            return response()->json(['message' => 'Board cleared']);
+        }
+
         $this->validate($request, [
             'title' => 'sometimes|required|max:30',
+            'description' => '',
         ]);
 
         if ($request->title) {
@@ -58,12 +66,8 @@ class BoardController extends Controller
                 'title' => $request->title,
                 'slug' => Str::slug($request->title),
             ]);
-        }
-
-        if ($request->has('clear')) {
-            $board->columns()->delete();
-
-            return response()->json(['message' => 'Board cleared']);
+        } elseif ($request->description) {
+            $board->update(['description' => $request->description]);
         }
 
         return response()->json(['message' => 'Board updated']);

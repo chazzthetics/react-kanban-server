@@ -13,6 +13,17 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * Observers.
+     *
+     * @var array
+     */
+    protected $observers = [
+        Board::class => BoardObserver::class,
+        Column::class => ColumnObserver::class,
+        Task::class => TaskObserver::class,
+    ];
+
+    /**
      * Register any application services.
      *
      * @return void
@@ -32,15 +43,4 @@ class AppServiceProvider extends ServiceProvider
             $model::observe($observer);
         }
     }
-
-    /**
-     * Observers
-     *
-     * @var array
-     */
-    protected $observers = [
-        Board::class => BoardObserver::class,
-        Column::class => ColumnObserver::class,
-        Task::class => TaskObserver::class,
-    ];
 }

@@ -4,9 +4,15 @@ namespace App\Observers;
 
 use App\Board;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class BoardObserver
 {
+    public function saving(Board $board)
+    {
+        $board->slug = Str::slug($board->title);
+    }
+
     //TODO: refactor - duplicate logic
     public function creating(Board $board)
     {
@@ -42,13 +48,11 @@ class BoardObserver
         }
     }
 
-    public function deleted(Board $board)
+    public function deleted()
     {
         if (Auth::user()->boards()->count() > 0) {
             $lastBoard = Auth::user()->boards()->latest()->first();
             $lastBoard->update(['is_current' => true]);
         }
-
-        $board->recordActivity('removed');
     }
 }

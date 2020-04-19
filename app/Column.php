@@ -10,7 +10,7 @@ class Column extends Model
     use Recordable;
 
     protected $fillable = [
-        'uuid', 'title', 'position', 'board_id', 'user_id',
+        'uuid', 'title', 'position', 'board_id', 'user_id', 'is_locked',
     ];
 
     protected $hidden = [

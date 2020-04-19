@@ -13,7 +13,7 @@ class TaskController extends Controller
     {
         $this->validate($request, [
             'uuid' => 'required|unique:tasks',
-            'content' => 'required|string',
+            'title' => 'required|string',
         ]);
 
         $column = Column::where('uuid', $uuid)->withCount('tasks')->firstOrFail();
@@ -21,12 +21,27 @@ class TaskController extends Controller
         $task = $column->addTask([
             'uuid' => $request->uuid,
             'user_id' => Auth::id(),
-            'content' => $request->content,
+            'title' => $request->title,
             'column_id' => $column->id,
             'position' => $column->tasks_count,
         ]);
 
         return response()->json($task, 201);
+    }
+
+    public function update(Request $request, string $uuid)
+    {
+        $task = Task::where('uuid', $uuid)->firstOrFail();
+
+        $this->validate($request, [
+            'title' => 'sometimes|required',
+        ]);
+
+        if ($request->title) {
+            $task->update(['title' => $request->title]);
+        }
+
+        return response()->json(['message' => 'Task updated']);
     }
 
     public function destroy(string $uuid)

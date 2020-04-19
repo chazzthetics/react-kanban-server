@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Activity;
+use App\Board;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +11,13 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        $activities = Activity::where('user_id', Auth::id())->latest()->paginate(20);
+        $board = Board::where('user_id', Auth::id())->where('is_current', true)->first();
+
+        if (!$board) {
+            return response()->json(null);
+        }
+
+        $activities = Activity::where('board_id', $board->id)->latest()->paginate(15);
 
         return response()->json($activities);
     }

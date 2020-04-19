@@ -10,7 +10,7 @@ class Task extends Model
     use Recordable;
 
     protected $fillable = [
-        'uuid', 'content', 'position', 'column_id', 'user_id',
+        'uuid', 'title', 'position', 'column_id', 'user_id',
     ];
 
     protected $casts = [
@@ -28,10 +28,5 @@ class Task extends Model
     public function column()
     {
         return $this->belongsTo(Column::class);
-    }
-
-    public function previousColumnTitle()
-    {
-        return Column::find($this->previousAttributes['column_id'])->title;
     }
 }

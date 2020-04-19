@@ -41,18 +41,24 @@ class ColumnController extends Controller
     {
         $column = Column::where('uuid', $uuid)->firstOrFail();
 
+        if ($request->has('clear')) {
+            $column->tasks()->delete();
+
+            return response()->json(['message' => 'Column cleared']);
+        }
+
+        if ($request->has('is_locked')) {
+            $column->update(['is_locked' => !$request->is_locked]);
+
+            return response()->json(['locked' => !$request->is_locked]);
+        }
+
         $this->validate($request, [
             'title' => 'sometimes|required:max30',
         ]);
 
         if ($request->title) {
             $column->update(['title' => $request->title]);
-        }
-
-        if ($request->has('clear')) {
-            $column->tasks()->delete();
-
-            return response()->json(['message' => 'Column cleared']);
         }
 
         return response()->json(['message' => 'Column updated']);

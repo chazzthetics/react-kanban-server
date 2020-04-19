@@ -19,6 +19,7 @@ class CreateActivitiesTable extends Migration
             $table->json('changes')->nullable();
             $table->nullableMorphs('recordable');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('board_id')->constrained()->cascadeOnDelete()->nullable();
             $table->timestamps();
         });
     }

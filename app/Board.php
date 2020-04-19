@@ -14,7 +14,7 @@ class Board extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'color', 'title', 'slug', 'user_id', 'is_current', 'is_starred',
+        'uuid', 'background', 'title', 'description', 'user_id', 'is_current', 'is_starred',
     ];
 
     protected $hidden = [

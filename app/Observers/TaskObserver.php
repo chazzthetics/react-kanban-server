@@ -20,6 +20,10 @@ class TaskObserver
         if ($task->isDirty('column_id')) {
             $task->recordActivity('moved');
         }
+
+        // if ($task->isDirty('title')) {
+        //     $task->recordActivity('title_updated');
+        // }
     }
 
     public function deleted(Task $task)

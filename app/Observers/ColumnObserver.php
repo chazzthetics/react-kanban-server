@@ -16,6 +16,12 @@ class ColumnObserver
         if ($column->isDirty('title')) {
             $column->recordActivity('title_updated');
         }
+
+        if ($column->isDirty('is_locked') && $column->is_locked) {
+            $column->recordActivity('locked');
+        } elseif ($column->isDirty('is_locked') && !$column->is_locked) {
+            $column->recordActivity('unlocked');
+        }
     }
 
     public function deleted(Column $column)
