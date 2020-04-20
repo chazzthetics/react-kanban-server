@@ -54,4 +54,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->get('/activities/now', ['uses' => 'ActivityController@show']);
     $router->delete('/activities/{id}', ['uses' => 'ActivityController@destroy']);
     $router->put('/activities', ['uses' => 'ActivityController@clear']);
+
+    // Photos
+    $router->get('/photos', ['uses' => 'PhotoController@index']);
 });

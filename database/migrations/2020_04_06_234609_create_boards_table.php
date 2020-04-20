@@ -17,7 +17,7 @@ class CreateBoardsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('title', 30);
-            $table->string('background', 30);
+            $table->string('background');
             $table->text('description')->nullable();
             $table->string('slug');
             $table->boolean('is_current')->default(true);

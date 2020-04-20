@@ -58,7 +58,7 @@ class BoardController extends Controller
 
         $this->validate($request, [
             'title' => 'sometimes|required|max:30',
-            'background' => 'sometimes|required|max:30',
+            'background' => 'sometimes|required',
             'description' => '',
         ]);
 
