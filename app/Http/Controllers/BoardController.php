@@ -58,6 +58,7 @@ class BoardController extends Controller
 
         $this->validate($request, [
             'title' => 'sometimes|required|max:30',
+            'background' => 'sometimes|required|max:30',
             'description' => '',
         ]);
 
@@ -68,6 +69,8 @@ class BoardController extends Controller
             ]);
         } elseif ($request->description) {
             $board->update(['description' => $request->description]);
+        } elseif ($request->background) {
+            $board->update(['background' => $request->background]);
         }
 
         return response()->json(['message' => 'Board updated']);

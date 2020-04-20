@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $board = Board::where('user_id', Auth::id())->where('is_current', true)->first();
 

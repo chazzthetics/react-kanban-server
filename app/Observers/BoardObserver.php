@@ -41,6 +41,10 @@ class BoardObserver
             $board->recordActivity('title_updated');
         }
 
+        if ($board->isDirty('background')) {
+            $board->recordActivity('background_updated');
+        }
+
         if ($board->isDirty('is_starred') && $board->is_starred) {
             $board->recordActivity('starred');
         } elseif ($board->isDirty('is_starred') && !$board->is_starred) {
