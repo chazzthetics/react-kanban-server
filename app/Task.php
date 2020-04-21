@@ -10,7 +10,7 @@ class Task extends Model
     use Recordable;
 
     protected $fillable = [
-        'uuid', 'title', 'position', 'column_id', 'user_id',
+        'uuid', 'title', 'position', 'description', 'column_id', 'user_id',
     ];
 
     protected $casts = [

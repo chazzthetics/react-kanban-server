@@ -35,10 +35,15 @@ class TaskController extends Controller
 
         $this->validate($request, [
             'title' => 'sometimes|required',
+            'description' => 'sometimes|required',
         ]);
 
         if ($request->title) {
             $task->update(['title' => $request->title]);
+        }
+
+        if ($request->description) {
+            $task->update(['description' => $request->description]);
         }
 
         return response()->json(['message' => 'Task updated']);
