@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Label extends Model
 {
     protected $fillable = [
-        'color',
+         'color',
+    ];
+
+    protected $casts = [
+        'id' => 'int',
+    ];
+
+    protected $hidden = [
+        'created_at', 'updated_at', 'pivot',
     ];
 
     public function tasks()

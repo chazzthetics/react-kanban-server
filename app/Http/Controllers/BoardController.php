@@ -11,7 +11,7 @@ class BoardController extends Controller
 {
     public function index()
     {
-        $boards = Auth::user()->boards()->with(['columns', 'columns.tasks'])->get();
+        $boards = Auth::user()->boards()->with(['columns', 'columns.tasks', 'columns.tasks.labels'])->get();
 
         return response()->json($boards);
     }

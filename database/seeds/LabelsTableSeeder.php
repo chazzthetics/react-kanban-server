@@ -12,7 +12,7 @@ class LabelsTableSeeder extends Seeder
      */
     public function run()
     {
-        $labels = ['blue', 'green', 'yellow', 'purple', 'red'];
+        $labels = ['green', 'yellow', 'orange', 'red', 'purple', 'blue'];
 
         foreach ($labels as $label) {
             Label::create([

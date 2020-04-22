@@ -15,7 +15,7 @@ class TaskLabelController extends Controller
         return response()->json(['message' => 'Label added']);
     }
 
-    public function destroy(Request $request, string $uuid)
+    public function update(Request $request, string $uuid)
     {
         $task = Task::where('uuid', $uuid)->firstOrFail();
         $task->labels()->detach($request->label);

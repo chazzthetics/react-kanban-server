@@ -44,8 +44,12 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->patch('/tasks/{uuid}', ['uses' => 'TaskController@update']);
     $router->delete('/tasks/{uuid}', ['uses' => 'TaskController@destroy']);
 
+    // Labels
+    $router->get('/labels', ['uses' => 'LabelController@index']);
+
     // Task Labels
     $router->post('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@store']);
+    $router->put('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@update']);
 
     // Reorder
     $router->patch('/boards/{uuid}/columns/reorder', ['uses' => 'ReorderController@columns']);
