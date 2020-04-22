@@ -44,6 +44,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->patch('/tasks/{uuid}', ['uses' => 'TaskController@update']);
     $router->delete('/tasks/{uuid}', ['uses' => 'TaskController@destroy']);
 
+    // Task Labels
+    $router->post('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@store']);
+
     // Reorder
     $router->patch('/boards/{uuid}/columns/reorder', ['uses' => 'ReorderController@columns']);
     $router->patch('/columns/{uuid}/tasks/reorder', ['uses' => 'ReorderController@tasks']);

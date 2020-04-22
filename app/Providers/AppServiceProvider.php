@@ -7,7 +7,9 @@ use App\Column;
 use App\Observers\BoardObserver;
 use App\Observers\ColumnObserver;
 use App\Observers\TaskObserver;
+use App\Observers\UserObserver;
 use App\Task;
+use App\User;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      * @var array
      */
     protected $observers = [
+        User::class => UserObserver::class,
         Board::class => BoardObserver::class,
         Column::class => ColumnObserver::class,
         Task::class => TaskObserver::class,
