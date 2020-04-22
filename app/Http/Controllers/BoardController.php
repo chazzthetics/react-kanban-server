@@ -67,10 +67,12 @@ class BoardController extends Controller
                 'title' => $request->title,
                 'slug' => Str::slug($request->title),
             ]);
-        } elseif ($request->description) {
-            $board->update(['description' => $request->description]);
         } elseif ($request->background) {
             $board->update(['background' => $request->background]);
+        } elseif ($request->description) {
+            $board->update(['description' => $request->description]);
+        } elseif (empty($request->description) && !$request->title) {
+            $board->update(['description' => null]);
         }
 
         return response()->json(['message' => 'Board updated']);

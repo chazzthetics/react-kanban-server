@@ -29,4 +29,9 @@ class Task extends Model
     {
         return $this->belongsTo(Column::class);
     }
+
+    public function labels()
+    {
+        return $this->belongsToMany(Label::class);
+    }
 }

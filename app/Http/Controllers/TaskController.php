@@ -35,7 +35,7 @@ class TaskController extends Controller
 
         $this->validate($request, [
             'title' => 'sometimes|required',
-            'description' => 'sometimes|required',
+            'description' => '',
         ]);
 
         if ($request->title) {
@@ -44,6 +44,8 @@ class TaskController extends Controller
 
         if ($request->description) {
             $task->update(['description' => $request->description]);
+        } elseif (empty($request->description) && !$request->title) {
+            $task->update(['description' => null]);
         }
 
         return response()->json(['message' => 'Task updated']);
