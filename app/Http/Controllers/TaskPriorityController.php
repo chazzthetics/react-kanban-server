@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Task;
 use Illuminate\Http\Request;
 
 class TaskPriorityController extends Controller
@@ -9,6 +10,10 @@ class TaskPriorityController extends Controller
     public function store(Request $request, string $uuid)
     {
         $task = Task::where('uuid', $uuid)->firstOrFail();
+
+        if ($task->priority) {
+            $task->priority()->detach($task->priority);
+        }
         $task->priority()->attach($request->priority);
 
         return response()->json(['message' => 'Priority added']);

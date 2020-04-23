@@ -47,6 +47,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // Labels
     $router->get('/labels', ['uses' => 'LabelController@index']);
 
+    // Priorities
+    $router->get('/priorities', ['uses' => 'PriorityController@index']);
+
     // Task Labels
     $router->post('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@store']);
     $router->put('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@update']);

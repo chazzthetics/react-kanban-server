@@ -19,7 +19,6 @@ class CreateTasksTable extends Migration
             $table->text('title');
             $table->text('description')->nullable();
             $table->text('comment')->nullable();
-            $table->string('priority')->nullable(); // TODO: change later
             $table->string('checklist')->nullable(); //TODO: change later
             $table->string('attatchment')->nullable(); //TODO: Change later
             $table->boolean('completed')->default(false);

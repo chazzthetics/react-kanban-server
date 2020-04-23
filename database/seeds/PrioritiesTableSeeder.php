@@ -12,11 +12,33 @@ class PrioritiesTableSeeder extends Seeder
      */
     public function run()
     {
-        $priorities = ['low', 'lowest', 'medium', 'high', 'highest'];
+        $priorities = [
+            [
+                'color' => 'green.300',
+                'name' => 'lowest',
+            ],
+            [
+                'color' => 'green.500',
+                'name' => 'low',
+            ],
+            [
+                'color' => 'yellow.400',
+                'name' => 'medium',
+            ],
+            [
+                'color' => 'orange.400',
+                'name' => 'high',
+            ],
+            [
+                'color' => 'red.400',
+                'name' => 'highest',
+            ],
+        ];
 
         foreach ($priorities as $priority) {
             Priority::create([
-                'name' => $priority,
+                'color' => $priority['color'],
+                'name' => $priority['name'],
             ]);
         }
     }

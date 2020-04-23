@@ -37,6 +37,6 @@ class Task extends Model
 
     public function priority()
     {
-        return $this->hasMany(Priority::class);
+        return $this->belongsToMany(Priority::class);
     }
 }
