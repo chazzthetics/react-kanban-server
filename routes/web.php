@@ -58,6 +58,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->post('/tasks/{uuid}/priority', ['uses' => 'TaskPriorityController@store']);
     $router->put('/tasks/{uuid}/priority', ['uses' => 'TaskPriorityController@update']);
 
+    // Task Due Date
+    $router->put('/tasks/{uuid}/due_date', ['uses' => 'TaskDueDateController@update']);
+    $router->delete('/tasks/{uuid}/due_date', ['uses' => 'TaskDueDateController@destroy']);
+
     // Reorder
     $router->patch('/boards/{uuid}/columns/reorder', ['uses' => 'ReorderController@columns']);
     $router->patch('/columns/{uuid}/tasks/reorder', ['uses' => 'ReorderController@tasks']);
