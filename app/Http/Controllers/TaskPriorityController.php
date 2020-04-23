@@ -12,7 +12,7 @@ class TaskPriorityController extends Controller
         $task = Task::where('uuid', $uuid)->firstOrFail();
 
         if ($task->priority) {
-            $task->priority()->detach($task->priority);
+            $task->priority()->detach();
         }
         $task->priority()->attach($request->priority);
 
@@ -22,7 +22,7 @@ class TaskPriorityController extends Controller
     public function update(Request $request, string $uuid)
     {
         $task = Task::where('uuid', $uuid)->firstOrFail();
-        $task->priority()->detach($request->priority);
+        $task->priority()->detach();
 
         return response()->json(['message' => 'Priority removed']);
     }
