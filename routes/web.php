@@ -51,10 +51,17 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->post('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@store']);
     $router->put('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@update']);
 
+    // Task Priority
+    $router->post('/tasks/{uuid}/priority', ['uses' => 'TaskPriorityController@store']);
+    $router->put('/tasks/{uuid}/priority', ['uses' => 'TaskPriorityController@update']);
+
     // Reorder
     $router->patch('/boards/{uuid}/columns/reorder', ['uses' => 'ReorderController@columns']);
     $router->patch('/columns/{uuid}/tasks/reorder', ['uses' => 'ReorderController@tasks']);
     $router->patch('/columns/{start_uuid}/{end_uuid}/tasks/between', ['uses' => 'ReorderController@between']);
+
+    // Move column
+    $router->put('/boards/{uuid}/columns/move', ['uses' => 'MoveController']);
 
     // Activities
     $router->get('/activities', ['uses' => 'ActivityController@index']);
