@@ -22,7 +22,7 @@ class Task extends Model
     ];
 
     protected $hidden = [
-        'id', 'user_id', 'column_id',
+        'id', 'user_id', 'column_id', 'updated_at',
     ];
 
     public function column()

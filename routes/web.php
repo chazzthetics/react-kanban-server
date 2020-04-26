@@ -53,6 +53,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // Task Labels
     $router->post('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@store']);
     $router->put('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@update']);
+    $router->delete('/tasks/{uuid}/labels', ['uses' => 'TaskLabelController@destroy']);
 
     // Task Priority
     $router->post('/tasks/{uuid}/priority', ['uses' => 'TaskPriorityController@store']);

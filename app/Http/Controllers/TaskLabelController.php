@@ -22,4 +22,12 @@ class TaskLabelController extends Controller
 
         return response()->json(['message' => 'Label removed']);
     }
+
+    public function destroy(string $uuid)
+    {
+        $task = Task::where('uuid', $uuid)->firstOrFail();
+        $task->labels()->detach();
+
+        return response()->json(['message' => 'Labels cleared']);
+    }
 }
