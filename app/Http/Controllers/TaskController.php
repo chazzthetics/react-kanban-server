@@ -42,9 +42,11 @@ class TaskController extends Controller
             $task->update(['title' => $request->title]);
         }
 
-        if ($request->description) {
+        if ($request->filled('description')) {
             $task->update(['description' => $request->description]);
-        } elseif (empty($request->description) && !$request->title) {
+        }
+
+        if ($request->has('description') && !$request->description) {
             $task->update(['description' => null]);
         }
 

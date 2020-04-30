@@ -58,6 +58,7 @@ class BoardController extends Controller
 
         if ($request->has('clear')) {
             $board->columns()->delete();
+            $board->recordActivity('cleared');
 
             return response()->json(['message' => 'Board cleared']);
         }
@@ -73,11 +74,17 @@ class BoardController extends Controller
                 'title' => $request->title,
                 'slug' => Str::slug($request->title),
             ]);
-        } elseif ($request->background) {
+        }
+
+        if ($request->background) {
             $board->update(['background' => $request->background]);
-        } elseif ($request->description) {
+        }
+
+        if ($request->has('description')) {
             $board->update(['description' => $request->description]);
-        } elseif (empty($request->description) && !$request->title) {
+        }
+
+        if ($request->has('description') && !$request->description) {
             $board->update(['description' => null]);
         }
 

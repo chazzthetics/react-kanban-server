@@ -11,8 +11,20 @@ class TaskObserver
         $task->recordActivity('created');
     }
 
+    //FIXME: inconsistent
     public function updated(Task $task)
     {
+        if ($task->isDirty('completed') && $task->completed) {
+            $task->recordActivity('completed');
+        }
+
+        if ($task->isDirty('completed') && !$task->completed) {
+            $task->recordActivity('incompleted');
+        }
+
+        if ($task->isDirty('due_date')) {
+        }
+
         if ($task->isDirty('column_id')) {
             $task->recordActivity('moved');
         }
@@ -25,9 +37,9 @@ class TaskObserver
             $task->recordActivity('description_updated');
         }
 
-        // if ($task->isDirty('completed')) {
-        //     $task->recordActivity('completed');
-        // }
+        if ($task->isDirty('due_date')) {
+            $task->recordActivity('due_date');
+        }
     }
 
     public function deleted(Task $task)

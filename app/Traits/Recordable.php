@@ -56,7 +56,7 @@ trait Recordable
 
     protected function activityChanges(string $description)
     {
-        //TODO: edit...looks disgusting
+        //TODO: edit...looks disgusting!!!
         if (Str::endsWith($description, 'created')) {
             if ('Task' === class_basename($this)) {
                 return [
@@ -92,7 +92,7 @@ trait Recordable
             ];
         }
 
-        if (Str::endsWith($description, 'removed')) {
+        if (Str::startsWith($description, 'removed')) {
             if ('Task' === class_basename($this)) {
                 return [
                     'before' => [],
@@ -120,6 +120,20 @@ trait Recordable
             ];
         }
 
+        if (Str::endsWith($description, 'completed')) {
+            return [
+                'before' => ['uuid' => $this->uuid],
+                'after' => ['title' => $this->title],
+            ];
+        }
+
+        if (Str::endsWith($description, 'incompleted')) {
+            return [
+                'before' => ['uuid' => $this->uuid],
+                'after' => ['title' => $this->title],
+            ];
+        }
+
         if (Str::endsWith($description, 'moved')) {
             return [
                 'before' => ['uuid' => $this->uuid, 'column_title' => $this->previousColumnTitle()],
@@ -130,7 +144,24 @@ trait Recordable
         if (Str::endsWith($description, 'cleared')) {
             return [
                 'before' => [],
-                'after' => $this->title,
+                'after' => ['title' => $this->title],
+            ];
+        }
+
+        if (Str::endsWith($description, 'due_date')) {
+            return [
+                'before' => ['uuid' => $this->uuid, 'due_date' => $this->previousAttributes['due_date']],
+                'after' => ['title' => $this->title, 'due_date' => $this->due_date],
+            ];
+        }
+
+        if (Str::endsWith($description, 'priority')) {
+            return [
+                'before' => ['uuid' => $this->uuid],
+                'after' => [
+                    'title' => $this->title,
+                    'priority' => $this->priority()->first() ? $this->priority()->first()->name : null,
+                ],
             ];
         }
     }

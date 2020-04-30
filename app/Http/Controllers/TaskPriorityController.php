@@ -14,15 +14,18 @@ class TaskPriorityController extends Controller
         if ($task->priority) {
             $task->priority()->detach();
         }
+
         $task->priority()->attach($request->priority);
+        $task->recordActivity('priority');
 
         return response()->json(['message' => 'Priority added']);
     }
 
-    public function update(Request $request, string $uuid)
+    public function update(string $uuid)
     {
         $task = Task::where('uuid', $uuid)->firstOrFail();
         $task->priority()->detach();
+        $task->recordActivity('priority');
 
         return response()->json(['message' => 'Priority removed']);
     }

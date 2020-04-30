@@ -43,6 +43,7 @@ class ColumnController extends Controller
 
         if ($request->has('clear')) {
             $column->tasks()->delete();
+            $column->recordActivity('cleared');
 
             return response()->json(['message' => 'Column cleared']);
         }
