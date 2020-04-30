@@ -48,6 +48,10 @@ class TaskController extends Controller
             $task->update(['description' => null]);
         }
 
+        if ($request->has('completed')) {
+            $task->update(['completed' => !$request->completed]);
+        }
+
         return response()->json(['message' => 'Task updated']);
     }
 

@@ -9,11 +9,15 @@ use Illuminate\Support\Str;
 
 class BoardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $boards = Auth::user()->boards()->with([
-            'columns', 'columns.tasks', 'columns.tasks.labels', 'columns.tasks.priority',
-        ])->get();
+        if ('count' === $request->query('q')) {
+            $boards = Auth::user()->boards()->count();
+        } else {
+            $boards = Auth::user()->boards()->with([
+                'columns', 'columns.tasks', 'columns.tasks.labels', 'columns.tasks.priority',
+            ])->get();
+        }
 
         return response()->json($boards);
     }

@@ -63,7 +63,7 @@ $app->configure('app');
 $app->configure('cors');
 $app->configure('auth');
 $app->configure('pexels');
-
+$app->configure('jwt');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware

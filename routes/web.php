@@ -63,6 +63,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->put('/tasks/{uuid}/due_date', ['uses' => 'TaskDueDateController@update']);
     $router->delete('/tasks/{uuid}/due_date', ['uses' => 'TaskDueDateController@destroy']);
 
+    // Task Activities
+    $router->get('/tasks/{uuid}/activities', ['uses' => 'TaskActivityController@index']);
+
     // Reorder
     $router->patch('/boards/{uuid}/columns/reorder', ['uses' => 'ReorderController@columns']);
     $router->patch('/columns/{uuid}/tasks/reorder', ['uses' => 'ReorderController@tasks']);

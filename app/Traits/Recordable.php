@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Activity;
 use App\Column;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -61,32 +60,49 @@ trait Recordable
         if (Str::endsWith($description, 'created')) {
             if ('Task' === class_basename($this)) {
                 return [
-                    'before' => null,
-                    'after' => ['column_title' => $this->column->title ?: '', 'task_title' => $this->title ?: ''],
-                ];
-            } else {
-                return [
-                    'before' => null,
-                    'after' => ['title' => $this->title ?: ''],
+                    'before' => ['uuid' => $this->uuid],
+                    'after' => ['column_title' => $this->column->title, 'task_title' => $this->title],
                 ];
             }
+
+            return [
+                'before' => [],
+                'after' => ['title' => $this->title],
+            ];
         }
 
-        if (Str::endsWith($description, 'updated')) {
+        if (Str::endsWith($description, 'title_updated')) {
+            if ('Task' === class_basename($this)) {
+                return [
+                    'before' => ['uuid' => $this->uuid, 'title' => $this->previousAttributes['title']],
+                    'after' => ['title' => $this->title],
+                ];
+            }
+
             return [
-                'before' => ['title' => $this->previousColumnTitle()],
-                'after' => Arr::except($this->getChanges(), 'updated_at'),
+                'before' => ['title' => $this->previousAttributes['title']],
+                'after' => ['title' => $this->title],
             ];
-            // return [
-            //     'before' => Arr::except(array_diff($this->previousAttributes, $this->getAttributes()), 'updated_at'),
-            //     'after' => Arr::except($this->getChanges(), 'updated_at'),
-            // ];
+        }
+
+        if (Str::endsWith($description, 'description_updated')) {
+            return [
+                'before' => 'Task' === class_basename($this) ? ['uuid' => $this->uuid, 'title' => $this->title] : [],
+                'after' => ['description' => $this->description],
+            ];
         }
 
         if (Str::endsWith($description, 'removed')) {
+            if ('Task' === class_basename($this)) {
+                return [
+                    'before' => [],
+                    'after' => ['task_title' => $this->title, 'column_title' => $this->column->title],
+                ];
+            }
+
             return [
-                'before' => ['title' => $this->title ?: $this->column->title, 'task_title' => 'Task' === class_basename($this) ? $this->title : ''],
-                'after' => [],
+                'before' => [],
+                'after' => ['title' => $this->title, 'board_title' => $this->board->title],
             ];
         }
 
@@ -106,8 +122,15 @@ trait Recordable
 
         if (Str::endsWith($description, 'moved')) {
             return [
-                'before' => ['column_title' => $this->previousColumnTitle()],
+                'before' => ['uuid' => $this->uuid, 'column_title' => $this->previousColumnTitle()],
                 'after' => ['column_title' => $this->column->title, 'task_title' => $this->title],
+            ];
+        }
+
+        if (Str::endsWith($description, 'cleared')) {
+            return [
+                'before' => [],
+                'after' => $this->title,
             ];
         }
     }
