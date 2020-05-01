@@ -10,7 +10,13 @@ class UserObserver
     public function saving(User $user)
     {
         $split = Str::of($user->name)->lower()->explode(' ');
-        $username = $split[0][0].$split[1][0].'x'.rand(100, 999);
-        $user->username = $username;
+
+        if ($split->count() >= 2) {
+            $username = $split[0][0].$split[1][0].'x'.rand(100, 999);
+            $user->username = $username;
+        } else {
+            $username = $split[0][0].$split[0][1].'x'.rand(100, 999);
+            $user->username = $username;
+        }
     }
 }

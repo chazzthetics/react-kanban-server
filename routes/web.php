@@ -33,7 +33,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->delete('/boards/{uuid}', ['uses' => 'BoardController@destroy']);
 
     // Columns
-    // $router->get('/boards/{uuid}/columns', ['uses' => 'ColumnController@index']);
     $router->get('/columns', ['uses' => 'ColumnController@index']);
     $router->post('/boards/{uuid}/columns', ['uses' => 'ColumnController@store']);
     $router->patch('/columns/{uuid}', ['uses' => 'ColumnController@update']);
@@ -65,6 +64,13 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     // Task Activities
     $router->get('/tasks/{uuid}/activities', ['uses' => 'TaskActivityController@index']);
+
+    // Task Checklist
+    $router->post('/tasks/{uuid}/checklist', ['uses' => 'ChecklistController@store']);
+
+    // Task Checklist Item
+    $router->post('/tasks/{uuid}/checklist/items', ['uses' => 'ChecklistItemController@store']);
+    $router->patch('/checklist/{uuid}', ['uses' => 'ChecklistItemController@update']);
 
     // Reorder
     $router->patch('/boards/{uuid}/columns/reorder', ['uses' => 'ReorderController@columns']);

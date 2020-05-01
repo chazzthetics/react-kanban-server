@@ -39,4 +39,14 @@ class Task extends Model
     {
         return $this->belongsToMany(Priority::class);
     }
+
+    public function checklist()
+    {
+        return $this->hasOne(Checklist::class);
+    }
+
+    public function addChecklist(array $attributes)
+    {
+        return $this->checklist()->create($attributes);
+    }
 }

@@ -32,8 +32,6 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        // Auth::user()->recordActivity('logged_in');
-
         return $this->respondWithToken($token);
     }
 
@@ -58,8 +56,6 @@ class AuthController extends Controller
         ]);
 
         $token = Auth::login($user);
-
-        // Auth::user()->recordActivity('registered');
 
         return $this->respondWithToken($token);
     }

@@ -15,7 +15,12 @@ class BoardController extends Controller
             $boards = Auth::user()->boards()->count();
         } else {
             $boards = Auth::user()->boards()->with([
-                'columns', 'columns.tasks', 'columns.tasks.labels', 'columns.tasks.priority',
+                'columns',
+                'columns.tasks',
+                'columns.tasks.labels',
+                'columns.tasks.priority',
+                'columns.tasks.checklist',
+                'columns.tasks.checklist.items',
             ])->get();
         }
 
