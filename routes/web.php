@@ -72,6 +72,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // Task Checklist Item
     $router->post('/tasks/{uuid}/checklist/items', ['uses' => 'ChecklistItemController@store']);
     $router->patch('/checklist/{uuid}', ['uses' => 'ChecklistItemController@update']);
+    $router->delete('/checklist/{uuid}', ['uses' => 'ChecklistItemController@destroy']);
 
     // Reorder
     $router->patch('/boards/{uuid}/columns/reorder', ['uses' => 'ReorderController@columns']);

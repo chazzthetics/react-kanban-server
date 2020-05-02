@@ -36,4 +36,13 @@ class ChecklistItemController extends Controller
 
         return response()->json(['message' => 'Checklist item toggled']);
     }
+
+    public function destroy(string $uuid)
+    {
+        $item = ChecklistItem::where('uuid', $uuid)->firstOrFail();
+
+        $item->delete();
+
+        return response()->json(['message' => 'Checklist item removed']);
+    }
 }
