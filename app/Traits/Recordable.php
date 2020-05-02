@@ -92,6 +92,25 @@ trait Recordable
             ];
         }
 
+        if (Str::endsWith($description, 'checklist_added')) {
+            return [
+                'before' => ['uuid' => $this->uuid],
+                'after' => [
+                    'title' => $this->title,
+                    'checklist' => $this->checklist()->first()->title,
+                ],
+            ];
+        }
+
+        if (Str::is($description, 'checklist_removed')) {
+            return [
+                'before' => ['uuid' => $this->uuid],
+                'after' => [
+                    'title' => $this->title,
+                ],
+            ];
+        }
+
         if (Str::startsWith($description, 'removed')) {
             if ('Task' === class_basename($this)) {
                 return [
@@ -120,7 +139,7 @@ trait Recordable
             ];
         }
 
-        if (Str::endsWith($description, 'completed')) {
+        if (Str::is($description, 'completed')) {
             return [
                 'before' => ['uuid' => $this->uuid],
                 'after' => ['title' => $this->title],

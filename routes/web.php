@@ -67,6 +67,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     // Task Checklist
     $router->post('/tasks/{uuid}/checklist', ['uses' => 'ChecklistController@store']);
+    $router->delete('/tasks/{uuid}/checklist', ['uses' => 'ChecklistController@destroy']);
 
     // Task Checklist Item
     $router->post('/tasks/{uuid}/checklist/items', ['uses' => 'ChecklistItemController@store']);

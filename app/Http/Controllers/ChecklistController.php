@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Checklist;
 use App\Task;
 use Illuminate\Http\Request;
 
@@ -23,8 +22,18 @@ class ChecklistController extends Controller
             'task_id' => $task->id,
         ]);
 
-        // $task->recordActivity('checklist_added');
+        $task->recordActivity('checklist_added');
 
         return response()->json($checklist, 201);
+    }
+
+    public function destroy(string $uuid)
+    {
+        $task = Task::where('uuid', $uuid)->firstOrFail();
+        $task->checklist()->delete();
+
+        $task->recordActivity('checklist_removed');
+
+        return response()->json(['message' => 'Checklist removed from task']);
     }
 }
