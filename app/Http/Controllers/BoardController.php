@@ -29,10 +29,8 @@ class BoardController extends Controller
 
     public function store(Request $request)
     {
-        //TODO: validation -- uuid validiation later
-
         $this->validate($request, [
-            'uuid' => 'required',
+            'uuid' => 'required|unique:boards,uuid',
             'title' => 'required|string|max:30',
             'background' => 'required|string|max:30',
             'description' => '',
