@@ -36,6 +36,7 @@ class ActivityController extends Controller
         return response()->json(['message' => 'Activity removed']);
     }
 
+    //FIXME:
     public function clear(Request $request)
     {
         Activity::destroy($request->activities);

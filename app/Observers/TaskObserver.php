@@ -23,6 +23,7 @@ class TaskObserver
         }
 
         if ($task->isDirty('due_date')) {
+            $task->recordActivity('due_date_changed');
         }
 
         if ($task->isDirty('column_id')) {
@@ -35,10 +36,6 @@ class TaskObserver
 
         if ($task->isDirty('description')) {
             $task->recordActivity('description_updated');
-        }
-
-        if ($task->isDirty('due_date')) {
-            $task->recordActivity('due_date');
         }
     }
 

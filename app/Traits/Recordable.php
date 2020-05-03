@@ -5,7 +5,6 @@ namespace App\Traits;
 use App\Activity;
 use App\Column;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 trait Recordable
 {
@@ -43,10 +42,95 @@ trait Recordable
         ]);
     }
 
+    protected function activityChanges(string $description)
+    {
+        switch ($description) {
+            case 'created':
+            case 'locked':
+            case 'unlocked':
+            case 'completed':
+            case 'incompleted':
+            case 'cleared':
+                switch (class_basename($this)) {
+                    case 'Board':
+                    case 'Column':
+                        return ['title' => $this->title];
+                    case 'Task':
+                        return [
+                            'uuid' => $this->uuid,
+                            'title' => $this->title,
+                            'parent_title' => $this->column->title,
+                        ];
+                    default:
+                        return null;
+                }
+                // no break
+            case 'removed':
+                switch (class_basename($this)) {
+                    case 'Column':
+                       return ['title' => $this->title, 'parent_title' => $this->board->title];
+                    case 'Task':
+                        return ['title' => $this->title, 'parent_title' => $this->column->title];
+                    default:
+                        return null;
+                }
+                // no break
+            case 'completed':
+            case 'incompleted':
+            case 'description_updated':
+            case 'checklist_removed':
+                switch (class_basename($this)) {
+                    case 'Task':
+                        return ['uuid' => $this->uuid, 'title' => $this->title];
+                    default:
+                        return null;
+                }
+                // no break
+            case 'title_updated':
+                return [
+                    'uuid' => $this->uuid,
+                    'before' => ['title' => $this->previousAttributes['title']],
+                    'after' => ['title' => $this->title],
+                ];
+            case 'checklist_added':
+                return [
+                    'uuid' => $this->uuid,
+                    'title' => $this->title,
+                    'checklist' => $this->checklist->title,
+                ];
+
+                return [
+                    'uuid' => $this->uuid,
+                ];
+            case 'due_date_changed':
+                return [
+                    'uuid' => $this->uuid,
+                    'title' => $this->title,
+                    'before' => ['due_date' => $this->previousAttributes['due_date']],
+                    'after' => ['due_date' => $this->due_date],
+                ];
+            case 'priority_changed':
+                return [
+                    'uuid' => $this->uuid,
+                    'title' => $this->title,
+                    'priority' => $this->priority()->exists() ? $this->priority()->first()->name : null,
+                ];
+            case 'moved':
+                return [
+                    'uuid' => $this->uuid,
+                    'title' => $this->title,
+                    'before' => ['title' => $this->previousColumnTitle()],
+                    'after' => ['title' => $this->column->title],
+                ];
+            default:
+                return;
+        }
+    }
+
     private function getBoardId()
     {
         if ('Task' === class_basename($this)) {
-            return $this->column->board_id; //FIXME: look up hasone relation again
+            return $this->column->board_id;
         } elseif ('Column' === class_basename($this)) {
             return $this->board_id;
         }
@@ -54,140 +138,9 @@ trait Recordable
         return $this->id;
     }
 
-    protected function activityChanges(string $description)
-    {
-        //TODO: edit...looks disgusting!!!
-        if (Str::endsWith($description, 'created')) {
-            if ('Task' === class_basename($this)) {
-                return [
-                    'before' => ['uuid' => $this->uuid],
-                    'after' => ['column_title' => $this->column->title, 'task_title' => $this->title],
-                ];
-            }
-
-            return [
-                'before' => [],
-                'after' => ['title' => $this->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'title_updated')) {
-            if ('Task' === class_basename($this)) {
-                return [
-                    'before' => ['uuid' => $this->uuid, 'title' => $this->previousAttributes['title']],
-                    'after' => ['title' => $this->title],
-                ];
-            }
-
-            return [
-                'before' => ['title' => $this->previousAttributes['title']],
-                'after' => ['title' => $this->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'description_updated')) {
-            return [
-                'before' => 'Task' === class_basename($this) ? ['uuid' => $this->uuid, 'title' => $this->title] : [],
-                'after' => ['description' => $this->description],
-            ];
-        }
-
-        if (Str::endsWith($description, 'checklist_added')) {
-            return [
-                'before' => ['uuid' => $this->uuid],
-                'after' => [
-                    'title' => $this->title,
-                    'checklist' => $this->checklist()->first()->title,
-                ],
-            ];
-        }
-
-        if (Str::is($description, 'checklist_removed')) {
-            return [
-                'before' => ['uuid' => $this->uuid],
-                'after' => [
-                    'title' => $this->title,
-                ],
-            ];
-        }
-
-        if (Str::startsWith($description, 'removed')) {
-            if ('Task' === class_basename($this)) {
-                return [
-                    'before' => [],
-                    'after' => ['task_title' => $this->title, 'column_title' => $this->column->title],
-                ];
-            }
-
-            return [
-                'before' => [],
-                'after' => ['title' => $this->title, 'board_title' => $this->board->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'starred')) {
-            return [
-                'before' => [],
-                'after' => ['title' => $this->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'locked')) {
-            return [
-                'before' => [],
-                'after' => ['title' => $this->title],
-            ];
-        }
-
-        if (Str::is($description, 'completed')) {
-            return [
-                'before' => ['uuid' => $this->uuid],
-                'after' => ['title' => $this->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'incompleted')) {
-            return [
-                'before' => ['uuid' => $this->uuid],
-                'after' => ['title' => $this->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'moved')) {
-            return [
-                'before' => ['uuid' => $this->uuid, 'column_title' => $this->previousColumnTitle()],
-                'after' => ['column_title' => $this->column->title, 'task_title' => $this->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'cleared')) {
-            return [
-                'before' => [],
-                'after' => ['title' => $this->title],
-            ];
-        }
-
-        if (Str::endsWith($description, 'due_date')) {
-            return [
-                'before' => ['uuid' => $this->uuid, 'due_date' => $this->previousAttributes['due_date']],
-                'after' => ['title' => $this->title, 'due_date' => $this->due_date],
-            ];
-        }
-
-        if (Str::endsWith($description, 'priority')) {
-            return [
-                'before' => ['uuid' => $this->uuid],
-                'after' => [
-                    'title' => $this->title,
-                    'priority' => $this->priority()->first() ? $this->priority()->first()->name : null,
-                ],
-            ];
-        }
-    }
-
     private function previousColumnTitle()
     {
-        //FIXME:
+        //FIXME: !!
         if ('Task' === class_basename($this)) {
             return Column::find($this->previousAttributes['column_id'])->title;
         }

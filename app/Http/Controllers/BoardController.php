@@ -47,6 +47,7 @@ class BoardController extends Controller
         return response()->json($board, 201);
     }
 
+    // TODO: separate controller methods?
     public function update(Request $request, string $uuid)
     {
         $board = Board::where('uuid', $uuid)->firstOrFail();
