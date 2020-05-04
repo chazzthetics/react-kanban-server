@@ -64,6 +64,7 @@ $app->configure('cors');
 $app->configure('auth');
 $app->configure('pexels');
 $app->configure('jwt');
+$app->configure('deploy');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -99,6 +100,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Lorisleiva\LaravelDeployer\LaravelDeployerServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
