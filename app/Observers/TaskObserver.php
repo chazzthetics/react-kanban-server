@@ -8,7 +8,7 @@ class TaskObserver
 {
     public function created(Task $task)
     {
-        $task->recordActivity('created');
+        // $task->recordActivity('created');
     }
 
     //FIXME: inconsistent

@@ -122,6 +122,12 @@ trait Recordable
                     'before' => ['title' => $this->previousColumnTitle()],
                     'after' => ['title' => $this->column->title],
                 ];
+            case 'copied':
+                return [
+                    'uuid' => $this->uuid,
+                    'title' => $this->title,
+                    'parent_title' => $this->column->title,
+                ];
             default:
                 return;
         }

@@ -82,6 +82,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // Move column
     $router->put('/boards/{uuid}/columns/move', ['uses' => 'MoveController']);
 
+    // Copy column
+    $router->post('/columns/{uuid}/copy', ['uses' => 'CopyController']);
+
     // Activities
     $router->get('/activities', ['uses' => 'ActivityController@index']);
     $router->get('/activities/now', ['uses' => 'ActivityController@show']);

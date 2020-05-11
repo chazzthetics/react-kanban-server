@@ -26,6 +26,8 @@ class TaskController extends Controller
             'position' => $column->tasks_count,
         ]);
 
+        $task->recordActivity('created');
+
         return response()->json($task, 201);
     }
 
