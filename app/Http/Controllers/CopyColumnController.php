@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 //TODO: refactor
-class CopyController extends Controller
+class CopyColumnController extends Controller
 {
     public function __invoke(Request $request, string $uuid)
     {
         $column = Column::where('uuid', $uuid)->firstOrFail();
 
+        // Copy column
         $copiedColumn = Column::create([
             'uuid' => $request->column['uuid'],
             'user_id' => Auth::id(),
@@ -23,16 +24,17 @@ class CopyController extends Controller
 
         // Update column positions
         $columns = Column::where([
-                ['board_id', $copiedColumn->board_id],
-                ['uuid', '!=', $uuid],
-                ['uuid', '!=', $copiedColumn->uuid],
-                ['position', '>=', $copiedColumn->position],
-                ])->get();
+            ['board_id', $copiedColumn->board_id],
+            ['uuid', '!=', $uuid],
+            ['uuid', '!=', $copiedColumn->uuid],
+            ['position', '>=', $copiedColumn->position],
+        ])->get();
 
         foreach ($columns as $column) {
             $column->update(['position' => $column->position + 1]);
         }
 
+        // Copy column tasks
         foreach ($request->tasks as $task) {
             $copiedTask = $copiedColumn->addTask([
                 'user_id' => Auth::id(),

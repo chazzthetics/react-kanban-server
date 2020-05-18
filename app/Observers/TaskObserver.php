@@ -11,7 +11,7 @@ class TaskObserver
         // $task->recordActivity('created');
     }
 
-    //FIXME: inconsistent
+    //FIXME:
     public function updated(Task $task)
     {
         if ($task->isDirty('completed') && $task->completed) {
