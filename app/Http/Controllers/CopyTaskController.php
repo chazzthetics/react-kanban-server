@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CopyTaskController extends Controller
 {
-    //TODO:
+    //TODO: refactor
     public function __invoke(Request $request, string $uuid)
     {
         $task = Task::where('uuid', $uuid)->firstOrFail();
